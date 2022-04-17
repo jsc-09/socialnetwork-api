@@ -51,7 +51,7 @@ module.exports = {
             .then(() => res.json({ message: 'User and associated thoughts deleted!' }))
       .catch((err) => res.status(500).json(err));
     },
-    // POST to add a new friend to a user's friend list
+    // POST to add a new friend to a user's friend list; /api/users/:userId/friends/:friendId
     addFriend(req, res) {
         User.findONeAndUpdate(
             { _id: req.params._id },
@@ -61,7 +61,7 @@ module.exports = {
             .then((user) => res.json(user))
             .catch((err) => res.status(500).json(err));
     },
-    // DELETE to remove a friend from a user's friend list
+    // DELETE to remove a friend from a user's friend list; /api/users/:userId/friends/:friendId
     deleteFriend (req, res) {
         User.findOneAndUpdate (
             { _id: req.params.studentId },
