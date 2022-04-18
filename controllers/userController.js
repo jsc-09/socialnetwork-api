@@ -9,7 +9,7 @@ module.exports = {
     },
     // GET a single user by its _id and populated thought and friend data; api/users/:id
     getSingleUser(req,res) {
-        User.findOne( {_id: req.params._id})
+        User.findOne( {_id: req.params.id})
             .select('-__v')
             .then((user) =>
                 !user 
@@ -29,7 +29,7 @@ module.exports = {
     // PUT to update a user by its _id; api/users/:id
     updateUser(req, res) {
         User.findOneAndUpdate(
-            {_id: req.params._id},
+            {_id: req.params.userId},
             { $set: req.body},
             { runValidators: true, new: true}
         )
@@ -41,7 +41,7 @@ module.exports = {
         
     deleteUser(req, res) {
         User.findOneAndDelete (
-            {_id: req.params._id},
+            {_id: req.params.userId},
         )
             .then((user) => 
             !user
@@ -54,7 +54,7 @@ module.exports = {
     // POST to add a new friend to a user's friend list; /api/users/:userId/friends/:friendId
     addFriend(req, res) {
         User.findONeAndUpdate(
-            { _id: req.params._id },
+            { _id: req.params.userId },
             { $push: { friends: req.params.friendId } },
             { runValidators: true, new: true }
         )
@@ -64,11 +64,17 @@ module.exports = {
     // DELETE to remove a friend from a user's friend list; /api/users/:userId/friends/:friendId
     deleteFriend (req, res) {
         User.findOneAndUpdate (
-            { _id: req.params.studentId },
+            { _id: req.params.userId },
             { $pull: { friend: { friendId: req.params.friendId } } },
             { runValidators: true, new: true }
         )
-            .then((user) => res.json(user))
-            .catch((err) => res.status(500).json(err));
+        .then((user) =>
+        !user
+          ? res
+              .status(404)
+              .json({ message: 'No user found with that ID :(' })
+          : res.json(user)
+      )
+      .catch((err) => res.status(500).json(err));
     },  
 };
