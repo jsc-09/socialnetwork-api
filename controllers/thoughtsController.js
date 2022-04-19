@@ -5,17 +5,18 @@ module.exports = {
     // GET to get all thoughts
     getThoughts(req, res) {
         Thought.find()
-            .then((users) => res.json(users))
+            .then((thought) => res.json(thought))
             .catch((err) => res.status(500).json(err))
     },
 
+
     // GET to get a single thought by its _id
     getSingleThought(req, res) {
-        Thought.findOne({ _id: req.params.thoughtId })
+        Thought.findOne({ _id: req.params._id })
             .select('-__v')
             .then((thought) =>
                 !thought
-                    ? res.status(404).json({ message: 'no user with that ID' })
+                    ? res.status(404).json({ message: 'no thought with that ID' })
                     : res.json(thought)
             )
             .catch((err) => res.status(500).json(err));
@@ -32,8 +33,8 @@ module.exports = {
                     { new: true, runValidators: true }
                 );
             })
-            .then((user) =>
-                !user
+            .then((thought) =>
+                !thought
                     ? res.status(404).json({
                         message: 'Thought created, but found no user with that ID',
                     })
@@ -47,7 +48,7 @@ module.exports = {
     // PUT to update a thought by its _id
     updateThought(req, res) {
         Thought.findOneAndUpdate(
-            { _id: req.params.thoughtId },
+            { _id: req.params._id },
             { $set: req.body },
             { runValidators: true, new: true }
         )
@@ -65,7 +66,7 @@ module.exports = {
     // DELETE to remove a thought by its _id
     deleteThought(req, res) {
         Thought.findOneAndDelete(
-            { _id: req.params.thoughtId }
+            { _id: req.params._id }
         )
             .then((thought) => res.json(thought))
             .catch((err) => res.status(500).json(err));
@@ -76,7 +77,7 @@ module.exports = {
     createReaction(req, res) {
         Thought.findOneAndUpdate(
             { _id: req.params.thoughtId },
-            { $push: { reactiosn: req.body } },
+            { $push: { reactions: req.body } },
             { new: true },
         )
             .then((thought) => res.json(thought))
