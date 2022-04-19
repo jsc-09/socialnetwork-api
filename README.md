@@ -20,4 +20,5 @@ If you would like to contribute, please fork the repo, create your feature branc
 
 ## Questions
 [Visit the project github page >](https://github.com/jsc-09/socialnetwork-api)<br>
+[View the video >](https://drive.google.com/file/d/1Q_8jfxA4VEPT_MeMpJDmZTS9_oSl7Ssf/view?usp=sharing)<br>
 Contact: <joanna.s.christian@gmail.com>
