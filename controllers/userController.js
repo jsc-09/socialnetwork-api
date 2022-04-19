@@ -4,6 +4,13 @@ module.exports = {
     // GET all users; /api/users
     getUsers(req, res) {
         User.find()
+        .populate(
+            {path: "thoughts"}
+        )
+        .populate( 
+
+            {path: "friends"}
+        )
             .then((users) => res.json(users))
             .catch((err) => res.status(500).json(err))
     },
