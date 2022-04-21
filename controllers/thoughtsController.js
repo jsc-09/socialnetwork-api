@@ -81,51 +81,13 @@ module.exports = {
         .catch((err) => {
           res.status(500).json(err);
         });
-    //     Thought.findOneAndRemove({ _id: req.params.thoughtId })
-    //   .then((thought) =>
-    //     !thought
-    //       ? res.status(404).json({ message: 'No such thought exists' })
-    //       : User.findOneAndUpdate(
-    //           { username: thought.username },
-    //           { $pull: { thoughts: thought.thoughtId } },
-    //           { new: true }
-    //         )
-    //   )
-    //   .then((thought) =>
-    //     !thought
-    //       ? res.status(404).json({
-    //           message: 'User found, Thought Not Deleted',
-    //         })
-    //       : res.json({ message: 'Thought successfully deleted' })
-    //   )
-    //   .catch((err) => {
-    //     console.log(err);
-    //     res.status(500).json(err);
-    //   });
     },
-    // User.findOneAndUpdate(
-    //     { _id: req.params.thoughtId },
-    //     { $pull: { thoughts: { _id: req.params.thoughtId } } },
-    //     { runValidators: true, new: true }
-    //   )
-    //     .then((thought) =>
-    //       !thought
-    //         ? res
-    //             .status(404)
-    //             .json({ message: 'No thought found with that ID' })
-    //         : res.json(thought)
-    //     )
-    //     .catch((err) => res.status(500).json(err));
-
-    // },
-
-    // POST to create a reaction stored in a single thought's reactions array field
 
     createReaction(req, res) {
         Thought.findOneAndUpdate(
             { _id: req.params.thoughtId },
-            { $push: { reactions: req.body } },
-            { new: true },
+            { $addToSet: { reactions: req.body } },
+            { runValidators:true, new: true },
         )
             .then((reaction) => res.json(reaction))
             .catch((err) => res.status(500).json(err));
@@ -137,14 +99,14 @@ module.exports = {
         Thought.findOneAndUpdate(
             { _id: req.params.thoughtId },
             { $pull: { reactions: { reactionId: req.params.reactionId } } },
-            { new: true }
+            { runValidators:true, new: true }
         )
         .then((reaction) =>
         !reaction
             ? res
                 .status(404)
                 .json({ message: 'No reaction found with that ID :(' })
-            : res.json(user)
+            : res.json(reaction)
     )
     .catch((err) => res.status(500).json(err));
     },
