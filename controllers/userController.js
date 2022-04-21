@@ -18,6 +18,13 @@ module.exports = {
     getSingleUser(req, res) {
         User.findOne({ _id: req.params._id })
             .select('-__v')
+            .populate(
+                {path: "thoughts"}
+            )
+            .populate( 
+    
+                {path: "friends"}
+            )
             .then((user) =>
                 !user
                     ? res.status(404).json({ message: 'no user with that ID' })
